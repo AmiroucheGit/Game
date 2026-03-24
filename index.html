@@ -1,146 +1,83 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emoji Lab Infinite</title>
-    <style>
-        :root { --bg: #fdfdfd; --panel: #ffffff; --accent: #6366f1; }
-        body { font-family: 'Segoe UI', sans-serif; text-align: center; background: var(--bg); margin: 0; overflow: hidden; touch-action: none; }
-        
-        #game-container { height: 100vh; display: flex; flex-direction: column; }
-        
-        /* Zone de jeu */
-        #canvas { flex-grow: 1; position: relative; background: #f1f5f9; overflow: hidden; 
-                  background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 30px 30px; }
-        
-        /* Inventaire */
-        #inventory-container { height: 35%; background: var(--panel); border-top: 2px solid #e2e8f0; display: flex; flex-direction: column; }
-        #inventory { display: flex; flex-wrap: wrap; justify-content: center; padding: 15px; overflow-y: auto; gap: 10px; }
-        
-        .emoji { font-size: 3.5rem; cursor: pointer; position: absolute; user-select: none; z-index: 10; touch-action: none; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); }
-        
-        .inv-item { font-size: 2.2rem; cursor: pointer; background: #fff; border-radius: 12px; padding: 8px; 
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; transition: transform 0.1s; }
-        .inv-item:active { transform: scale(0.9); }
-        
-        h2 { margin: 10px 0; font-size: 1rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
-        #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 20px; opacity: 0; transition: opacity 0.3s; z-index: 100; pointer-events: none; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>London Oven Sparkling | Professional Oven Cleaning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800">
 
-<div id="toast">Nouvelle découverte !</div>
-
-<div id="game-container">
-    <h2>Mélange les éléments</h2>
-    <div id="canvas"></div>
-    <div id="inventory-container">
-        <div id="inventory">
-            <div class="inv-item" onclick="spawn('🔥')">🔥</div>
-            <div class="inv-item" onclick="spawn('💧')">💧</div>
-            <div class="inv-item" onclick="spawn('🌱')">🌱</div>
-            <div class="inv-item" onclick="spawn('💨')">💨</div>
-            <div class="inv-item" onclick="spawn('🌍')">🌍</div>
-            <div class="inv-item" onclick="spawn('☀️')">☀️</div>
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-blue-600">Oven<span class="text-slate-400">Sparkle</span></h1>
+            <a href="#booking" class="bg-blue-600 text-white px-5 py-2 rounded-full font-semibold hover:bg-blue-700 transition">Book Now</a>
         </div>
-    </div>
-</div>
+    </nav>
 
-<script>
-    const canvas = document.getElementById('canvas');
-    const inventory = document.getElementById('inventory');
-    const discovered = new Set(['🔥', '💧', '🌱', '💨', '🌍', '☀️']);
+    <header class="bg-white py-16 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl md:text-6xl font-extrabold mb-6">Professional Oven Cleaning in <span class="text-blue-600">London</span></h2>
+            <p class="text-xl text-slate-600 mb-8">We restore your oven to showroom condition. Eco-friendly, fume-free, and ready to use immediately.</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <div class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> No Fumes</div>
+                <div class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Fully Insured</div>
+                <div class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> 100% Satisfaction</div>
+            </div>
+        </div>
+    </header>
 
-    // Base de données de recettes
-    const recipes = {
-        '🔥💧': '☁️', '🔥🌱': '🌿', '💧🌱': '🌸', '💨🔥': '☀️', '💨💧': '❄️',
-        '☀️💧': '🌈', '🔥🌍': '🌋', '💧🌍': '🌱', '🌸🐝': '🍯', '🦎🔥': '🐲',
-        '🐴🌈': '🦄', '💀🧪': '🧟', '💻☕': '👨‍💻', '🍕🍍': '🚫', '🚀🌙': '👨‍🚀',
-        '☁️⚡': '⛈️', '🌾🍞': '🥪', '⚡📱': '🔋', '🚗💨': '🏁', '📖🧠': '💡'
-        // ... Ajoute ici les 100 autres de la liste précédente
-    };
+    <section class="py-16 max-w-6xl mx-auto px-4">
+        <h3 class="text-3xl font-bold text-center mb-12">Our Services & Pricing</h3>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 text-center">
+                <i class="fas fa-utensils text-4xl text-blue-500 mb-4"></i>
+                <h4 class="text-xl font-bold mb-2">Single Oven</h4>
+                <p class="text-3xl font-bold text-slate-900 mb-4">£50</p>
+                <p class="text-slate-500">Deep clean including racks and glass panels.</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border-2 border-blue-500 text-center relative">
+                <span class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-500 text-white px-4 py-1 rounded-full text-sm">Most Popular</span>
+                <i class="fas fa-stove text-4xl text-blue-500 mb-4"></i>
+                <h4 class="text-xl font-bold mb-2">Double Oven</h4>
+                <p class="text-3xl font-bold text-slate-900 mb-4">£75</p>
+                <p class="text-slate-500">Full internal scrub of both compartments.</p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 text-center">
+                <i class="fas fa-blender text-4xl text-blue-500 mb-4"></i>
+                <h4 class="text-xl font-bold mb-2">Range / AGA</h4>
+                <p class="text-3xl font-bold text-slate-900 mb-4">From £110</p>
+                <p class="text-slate-500">Specialist cleaning for large luxury cookers.</p>
+            </div>
+        </div>
+    </section>
 
-    function spawn(char) {
-        const el = document.createElement('div');
-        el.className = 'emoji';
-        el.innerText = char;
-        // Position aléatoire au centre
-        el.style.left = (window.innerWidth/2 - 40) + (Math.random()*40-20) + 'px';
-        el.style.top = (canvas.offsetHeight/2 - 40) + (Math.random()*40-20) + 'px';
-        canvas.appendChild(el);
-        makeDraggable(el);
-    }
+    <section id="booking" class="bg-blue-900 py-16 px-4 text-white">
+        <div class="max-w-2xl mx-auto">
+            <h3 class="text-3xl font-bold text-center mb-8">Request a Quote / Booking</h3>
+            
+            <form action="https://formspree.io/f/VOTRE_ID_ICI" method="POST" class="space-y-4">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <input type="text" name="name" placeholder="Full Name" required class="w-full p-4 rounded-lg text-slate-900">
+                    <input type="email" name="email" placeholder="Email Address" required class="w-full p-4 rounded-lg text-slate-900">
+                </div>
+                <input type="text" name="postcode" placeholder="London Postcode (e.g. SW1A)" required class="w-full p-4 rounded-lg text-slate-900">
+                <select name="service" class="w-full p-4 rounded-lg text-slate-900">
+                    <option>Single Oven</option>
+                    <option>Double Oven</option>
+                    <option>Range / AGA</option>
+                    <option>Extractor / Hob Clean</option>
+                </select>
+                <textarea name="message" placeholder="Preferred date or special requests..." class="w-full p-4 rounded-lg text-slate-900 h-32"></textarea>
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-400 py-4 rounded-lg font-bold text-xl transition">Send Request</button>
+            </form>
+        </div>
+    </section>
 
-    function makeDraggable(el) {
-        let offsetX, offsetY;
+    <footer class="py-8 text-center text-slate-400 text-sm">
+        © 2026 London Oven Sparkle Ltd. All rights reserved.
+    </footer>
 
-        el.addEventListener('touchstart', (e) => {
-            const touch = e.touches[0];
-            offsetX = touch.clientX - el.offsetLeft;
-            offsetY = touch.clientY - el.offsetTop;
-            el.style.zIndex = 1000;
-        });
-
-        el.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            const touch = e.touches[0];
-            el.style.left = (touch.clientX - offsetX) + 'px';
-            el.style.top = (touch.clientY - offsetY) + 'px';
-            checkCollision(el);
-        });
-
-        el.addEventListener('touchend', () => {
-            el.style.zIndex = 10;
-        });
-    }
-
-    function checkCollision(activeEl) {
-        const emojis = document.querySelectorAll('.emoji');
-        emojis.forEach(other => {
-            if (other === activeEl) return;
-
-            const r1 = activeEl.getBoundingClientRect();
-            const r2 = other.getBoundingClientRect();
-
-            // Calcul de collision simple
-            const overlap = !(r1.right < r2.left || r1.left > r2.right || r1.bottom < r2.top || r1.top > r2.bottom);
-
-            if (overlap) {
-                const pair = [activeEl.innerText, other.innerText].sort().join('');
-                if (recipes[pair]) {
-                    const result = recipes[pair];
-                    
-                    // Effet visuel et vibration
-                    if (window.navigator.vibrate) window.navigator.vibrate(50);
-                    
-                    // Mise à jour de l'emoji actif
-                    activeEl.innerText = result;
-                    other.remove();
-
-                    // Ajouter à l'inventaire si nouveau
-                    if (!discovered.has(result)) {
-                        addNewDiscovery(result);
-                    }
-                }
-            }
-        });
-    }
-
-    function addNewDiscovery(emoji) {
-        discovered.add(emoji);
-        const div = document.createElement('div');
-        div.className = 'inv-item';
-        div.innerText = emoji;
-        div.onclick = () => spawn(emoji);
-        inventory.appendChild(div);
-
-        // Feedback utilisateur
-        const toast = document.getElementById('toast');
-        toast.style.opacity = '1';
-        setTimeout(() => toast.style.opacity = '0', 2000);
-    }
-</script>
 </body>
 </html>
-
