@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Emoji Lab Infinite</title>
+    <style>
+        :root { --bg: #fdfdfd; --panel: #ffffff; --accent: #6366f1; }
+        body { font-family: 'Segoe UI', sans-serif; text-align: center; background: var(--bg); margin: 0; overflow: hidden; touch-action: none; }
+        
+        #game-container { height: 100vh; display: flex; flex-direction: column; }
+        
+        /* Zone de jeu */
+        #canvas { flex-grow: 1; position: relative; background: #f1f5f9; overflow: hidden; 
+                  background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 30px 30px; }
+        
+        /* Inventaire */
+        #inventory-container { height: 35%; background: var(--panel); border-top: 2px solid #e2e8f0; display: flex; flex-direction: column; }
+        #inventory { display: flex; flex-wrap: wrap; justify-content: center; padding: 15px; overflow-y: auto; gap: 10px; }
+        
+        .emoji { font-size: 3.5rem; cursor: pointer; position: absolute; user-select: none; z-index: 10; touch-action: none; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); }
+        
+        .inv-item { font-size: 2.2rem; cursor: pointer; background: #fff; border-radius: 12px; padding: 8px; 
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; transition: transform 0.1s; }
+        .inv-item:active { transform: scale(0.9); }
+        
+        h2 { margin: 10px 0; font-size: 1rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+        #toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 20px; opacity: 0; transition: opacity 0.3s; z-index: 100; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+<div id="toast">Nouvelle découverte !</div>
+
+<div id="game-container">
+    <h2>Mélange les éléments</h2>
+    <div id="canvas"></div>
+    <div id="inventory-container">
+        <div id="inventory">
+            <div class="inv-item" onclick="spawn('🔥')">🔥</div>
+            <div class="inv-item" onclick="spawn('💧')">💧</div>
+            <div class="inv-item" onclick="spawn('🌱')">🌱</div>
+            <div class="inv-item" onclick="spawn('💨')">💨</div>
+            <div class="inv-item" onclick="spawn('🌍')">🌍</div>
+            <div class="inv-item" onclick="spawn('☀️')">☀️</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const inventory = document.getElementById('inventory');
+    const discovered = new Set(['🔥', '💧', '🌱', '💨', '🌍', '☀️']);
+
+    // Base de données de recettes
+    const recipes = {
+        '🔥💧': '☁️', '🔥🌱': '🌿', '💧🌱': '🌸', '💨🔥': '☀️', '💨💧': '❄️',
+        '☀️💧': '🌈', '🔥🌍': '🌋', '💧🌍': '🌱', '🌸🐝': '🍯', '🦎🔥': '🐲',
+        '🐴🌈': '🦄', '💀🧪': '🧟', '💻☕': '👨‍💻', '🍕🍍': '🚫', '🚀🌙': '👨‍🚀',
+        '☁️⚡': '⛈️', '🌾🍞': '🥪', '⚡📱': '🔋', '🚗💨': '🏁', '📖🧠': '💡'
+        // ... Ajoute ici les 100 autres de la liste précédente
+    };
+
+    function spawn(char) {
+        const el = document.createElement('div');
+        el.className = 'emoji';
+        el.innerText = char;
+        // Position aléatoire au centre
+        el.style.left = (window.innerWidth/2 - 40) + (Math.random()*40-20) + 'px';
+        el.style.top = (canvas.offsetHeight/2 - 40) + (Math.random()*40-20) + 'px';
+        canvas.appendChild(el);
+        makeDraggable(el);
+    }
+
+    function makeDraggable(el) {
+        let offsetX, offsetY;
+
+        el.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            offsetX = touch.clientX - el.offsetLeft;
+            offsetY = touch.clientY - el.offsetTop;
+            el.style.zIndex = 1000;
+        });
+
+        el.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            el.style.left = (touch.clientX - offsetX) + 'px';
+            el.style.top = (touch.clientY - offsetY) + 'px';
+            checkCollision(el);
+        });
+
+        el.addEventListener('touchend', () => {
+            el.style.zIndex = 10;
+        });
+    }
+
+    function checkCollision(activeEl) {
+        const emojis = document.querySelectorAll('.emoji');
+        emojis.forEach(other => {
+            if (other === activeEl) return;
+
+            const r1 = activeEl.getBoundingClientRect();
+            const r2 = other.getBoundingClientRect();
+
+            // Calcul de collision simple
+            const overlap = !(r1.right < r2.left || r1.left > r2.right || r1.bottom < r2.top || r1.top > r2.bottom);
+
+            if (overlap) {
+                const pair = [activeEl.innerText, other.innerText].sort().join('');
+                if (recipes[pair]) {
+                    const result = recipes[pair];
+                    
+                    // Effet visuel et vibration
+                    if (window.navigator.vibrate) window.navigator.vibrate(50);
+                    
+                    // Mise à jour de l'emoji actif
+                    activeEl.innerText = result;
+                    other.remove();
+
+                    // Ajouter à l'inventaire si nouveau
+                    if (!discovered.has(result)) {
+                        addNewDiscovery(result);
+                    }
+                }
+            }
+        });
+    }
+
+    function addNewDiscovery(emoji) {
+        discovered.add(emoji);
+        const div = document.createElement('div');
+        div.className = 'inv-item';
+        div.innerText = emoji;
+        div.onclick = () => spawn(emoji);
+        inventory.appendChild(div);
+
+        // Feedback utilisateur
+        const toast = document.getElementById('toast');
+        toast.style.opacity = '1';
+        setTimeout(() => toast.style.opacity = '0', 2000);
+    }
+</script>
+</body>
+</html>
+
